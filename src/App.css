@@ -1,0 +1,35 @@
+:root{
+    --width:3.1rem;
+    --gap: 1rem
+}
+.container{
+    display: flex;
+    gap: var(--gap);
+}
+.box{
+    width:var(--width);
+    background-color:blue;
+    border: 1px solid black;
+    border-radius: 0.25rem;
+    color:white;
+}
+.move-left {
+    animation: move-left-animation forwards 500ms ease-in-out;
+}
+.move-right {
+    animation: move-right-animation forwards 500ms ease-in-out;
+}
+
+@keyframes move-left-animation{
+    100%{
+        transform: translateX(calc(var(--width) + var(--gap)));
+    }
+}
+
+@keyframes move-right-animation{
+    100%{
+        transform: translate(calc(-1 * calc(var(--width) + var(--gap))));
+    }
+}
+
+
