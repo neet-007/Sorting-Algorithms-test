@@ -14,10 +14,10 @@
     color:white;
 }
 .move-left {
-    animation: move-left-animation forwards 500ms ease-in-out;
+    animation: move-left-animation forwards 2000ms ease-in-out;
 }
 .move-right {
-    animation: move-right-animation forwards 500ms ease-in-out;
+    animation: move-right-animation forwards 2000ms ease-in-out;
 }
 
 @keyframes move-left-animation{

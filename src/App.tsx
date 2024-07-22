@@ -23,16 +23,36 @@ function App() {
         const temp = newArr[currindex];
         newArr[currindex] = newArr[currindex - 1];
         newArr[currindex - 1] = temp;
-        newArr[currindex].className = 'move-right';
-        newArr[currindex - 1].className = 'move-left';
+
+        newArr[currindex].className = '';
+        if (currindex > 1){
+          newArr[currindex - 1].className = 'move-right';
+          newArr[currindex - 2].className = 'move-left';
+        }else{
+          newArr[currindex - 1].className = '';
+        };
+
         return newArr;
       });
 
       setCurrIndex(prev => prev === 1 ? -1 : prev - 1)
-    },500)
+    },2000)
 
-    return () => clearTimeout(timeOut);
+    return () => {
+      clearTimeout(timeOut)
+    };
   },[currindex])
+
+  function startAnimation(){
+    setCurrIndex(arr.length - 1);
+    setArr(prevArr => {
+      const newArr = [...prevArr];
+      newArr[newArr.length - 1].className = 'move-right';
+      newArr[newArr.length - 2].className = 'move-left';
+
+      return newArr
+    });
+  };
 
   return (
     <div>
@@ -43,7 +63,7 @@ function App() {
           </div>
         ))}
         </div>
-        <button onClick={() => setCurrIndex(arr.length - 1)}>sort</button>
+        <button onClick={startAnimation}>sort</button>
     </div>
   )
 }
