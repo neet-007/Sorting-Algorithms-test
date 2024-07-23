@@ -23,72 +23,71 @@ const BubbleSort:React.FC<ComponentProps<'div'> & {arr:BoxType[], isSorting:bool
     },[isSorting])
 
     useEffect(() => {
-      if (!localIsSorting || currindex < -1){
-        return
-      };
-
+      if (!localIsSorting || currindex < -1) {
+        return;
+      }
+    
       let timeOut = undefined;
-      if (currindex === -1){
+    
+      if (currindex === -1) {
         setLocalArr(prevArr => {
-          const newArr = [...prevArr]
-          if (newArr[0].val > newArr[1].val){
+          const newArr = [...prevArr];
+          if (newArr[0].val > newArr[1].val) {
             newArr[0].className = 'move-left';
             newArr[1].className = 'move-right';
             setSwapped(true);
-          };
-
-          return newArr
+          }
+          return newArr;
         });
         setCurrIndex(0);
-      }else{
-          timeOut = setTimeout(() => {
-              setLocalArr(prevArr => {
-                  const newArr = [...prevArr];
-                  if (newArr[currindex].val > newArr[currindex + 1].val){
-                    const temp = newArr[currindex];
-                    newArr[currindex] = newArr[currindex + 1];
-                    newArr[currindex + 1] = temp;
-                  };
-
-                  newArr[currindex].className = '';
-                  if (currindex < length - 2){
-                      if (newArr[currindex + 1].val > newArr[currindex + 2].val){
-                        newArr[currindex + 1].className = 'move-left';
-                        newArr[currindex + 2].className = 'move-right';
-                        setSwapped(true)
-                      }else{
-                        newArr[currindex + 1].className = '';
-                        newArr[currindex + 2].className = '';
-                      }
-                      setCurrIndex(prev => prev + 1)
-                    }else{
-                        console.log('ehhhhhhhhhhhere')
-                        newArr[currindex + 1].className = '';
-                        if (swapped){
-                          setLength(prev => {
-                            if (prev > 1){
-                              setCurrIndex(0);
-                              return prev - 1
-                            }
-                            setCurrIndex(-2);
-                            return arr.length
-                          });
-                        }else{
-                          setCurrIndex(-2);
-                          setLength(arr.length);
-                        }
-                    };
-                    return newArr;
+      } else {
+        timeOut = setTimeout(() => {
+          setLocalArr(prevArr => {
+            const newArr = [...prevArr];
+            if (newArr[currindex].val > newArr[currindex + 1].val) {
+              const temp = newArr[currindex];
+              newArr[currindex] = newArr[currindex + 1];
+              newArr[currindex + 1] = temp;
+            }
+    
+            newArr[currindex].className = '';
+            if (currindex < length - 2) {
+              if (newArr[currindex + 1].val > newArr[currindex + 2].val) {
+                newArr[currindex + 1].className = 'move-left';
+                newArr[currindex + 2].className = 'move-right';
+                setSwapped(true);
+              } else {
+                newArr[currindex + 1].className = '';
+                newArr[currindex + 2].className = '';
+              }
+              setCurrIndex(prev => prev + 1);
+            } else {
+              newArr[currindex + 1].className = '';
+              if (swapped) {
+                setLength(prev => {
+                  if (prev > 1) {
+                    setCurrIndex(0);
+                    return prev - 1;
+                  }
+                  setCurrIndex(-2);
+                  return arr.length;
                 });
-            },500)
-        }
-
+              } else {
+                setCurrIndex(-2);
+                setLength(arr.length);
+              }
+            }
+            return newArr;
+          });
+        }, 500);
+      }
+    
       return () => {
-        if (timeOut){
-            clearTimeout(timeOut)
+        if (timeOut) {
+          clearTimeout(timeOut);
         }
       };
-    },[currindex, localIsSorting, length])
+    }, [currindex, localIsSorting, length, swapped]);
 
     return (
       <div>
