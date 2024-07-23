@@ -10,10 +10,11 @@ const SelectionSort:React.FC<ComponentProps<'div'> & {arr:BoxType[], isSorting:b
       if (currindex !== -2){
         return
       }
+
       onSortComplete()
       setCurrIndex(-1)
     },[currindex])
-  
+
     useEffect(() => {
       setLocalIsSorting(isSorting);
     },[isSorting])

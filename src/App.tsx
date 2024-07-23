@@ -1,10 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import BubbleSort from './SortingComponent/BubbleSort'
 import HeapSort from './SortingComponent/HeapSort'
 import QuickSortBase from './SortingComponent/QuickSortBase'
 import QuickSortDuplicate from './SortingComponent/QuickSortDuplicates'
 import SelectionSort from './SortingComponent/SelectionSort'
 import './App.css'
+
+/**
+ ---COMMANDS---
+  * -2 setting sortCompelete of the sort to true
+  * -1 intial state
+  * > -1 sorting
+ */
 
 export type BoxType = {
   val:number,
@@ -17,7 +24,14 @@ function App() {
   const [arr] = useState<BoxType[]>(Array(7).fill({val:0, className:''}).map(() => ({val:Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20), className:''})))
   const [isSorting, setIsSorting] = useState(false);
   const [sortCompleted, setSortCompleted] = useState({ bubbleSort: false, quickSort: false });
-  console.log(sortCompleted)
+
+  useEffect(() => {
+    const condition = Object.values(sortCompleted).every((completed) => completed);
+    if (condition){
+      setIsSorting(false)
+    }
+  },Object.values(sortCompleted))
+
   const startSorting = () => {
     setIsSorting(true);
     setSortCompleted({ bubbleSort: false, quickSort: false });
@@ -40,8 +54,8 @@ function App() {
     <div>
       <div style={{display:'flex', flexDirection:'column', gap:'1rem'}}>
         <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')}/>
-        <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSort')}/>
         {/*
+          <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSort')}/>
           <HeapSort arr={arr} isSorting={isSorting}/>
           <QuickSortDuplicate arr={arr} isSorting={isSorting}/>
           <QuickSortBase arr={arr} isSorting={isSorting}/>
