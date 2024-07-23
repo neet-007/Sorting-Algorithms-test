@@ -1,12 +1,25 @@
 import React, {ComponentProps, useEffect, useState} from 'react'
 import { BoxType } from '../App'
 
-const SelectionSort:React.FC<ComponentProps<'div'> & {arr:BoxType[], isSorting:boolean}> = ({arr, isSorting}) => {
+const SelectionSort:React.FC<ComponentProps<'div'> & {arr:BoxType[], isSorting:boolean, onSortComplete:() => void}> = ({arr, isSorting, onSortComplete}) => {
     const [localArr, setLocalArr] = useState<BoxType[]>([...arr])
     const [currindex, setCurrIndex] = useState<number>(-1);
+    const [localIsSorting, setLocalIsSorting] = useState<boolean>(isSorting);
 
     useEffect(() => {
-      if (!isSorting){
+      if (currindex !== -2){
+        return
+      }
+      onSortComplete()
+      setCurrIndex(-1)
+    },[currindex])
+  
+    useEffect(() => {
+      setLocalIsSorting(isSorting);
+    },[isSorting])
+
+    useEffect(() => {
+      if (!localIsSorting || currindex < -1){
         return
       };
 
@@ -41,7 +54,8 @@ const SelectionSort:React.FC<ComponentProps<'div'> & {arr:BoxType[], isSorting:b
 
                 setCurrIndex(prev => {
                     if (prev === 1){
-                        return -1
+                        setLocalIsSorting(false);
+                        return -2
                     };
                     return prev - 1
                 })
@@ -53,7 +67,7 @@ const SelectionSort:React.FC<ComponentProps<'div'> & {arr:BoxType[], isSorting:b
             clearTimeout(timeOut)
         }
       };
-    },[currindex, isSorting])
+    },[currindex, localIsSorting])
 
     return (
       <div>
