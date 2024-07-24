@@ -13,18 +13,11 @@ import './App.css'
   * > -1 sorting
  */
 
-export type BoxType = {
-  val:number,
-  className: 'move-right' | 'move-left' | ''
-}
-
-
-
 function App() {
-  const [arr] = useState<BoxType[]>(Array(7).fill({val:0, className:''}).map(() => ({val:Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20), className:''})))
+  const [arr] = useState<number[]>(Array(7).fill(0).map(() => (Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20))))
   const [isSorting, setIsSorting] = useState(false);
-  const [sortCompleted, setSortCompleted] = useState({ bubbleSort: false});
-  console.log('base', arr)
+  const [sortCompleted, setSortCompleted] = useState({ selectionSort: false});
+
   useEffect(() => {
     const condition = Object.values(sortCompleted).every((completed) => completed);
     if (condition){
@@ -34,7 +27,7 @@ function App() {
 
   const startSorting = () => {
     setIsSorting(true);
-    setSortCompleted({ bubbleSort: false });
+    setSortCompleted({ selectionSort: false });
     // Trigger sorting in child components
   };
 
@@ -45,7 +38,7 @@ function App() {
   const resetSorting = () => {
     // Reset sorting state in child components
     setIsSorting(false);
-    setSortCompleted({ bubbleSort: false });
+    setSortCompleted({ selectionSort: false });
   };
 
   const allSortsCompleted = Object.values(sortCompleted).every((completed) => completed);
@@ -53,9 +46,9 @@ function App() {
   return(
     <div>
       <div style={{display:'flex', flexDirection:'column', gap:'1rem'}}>
-        <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')}/>
+        <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')}/>
         {/*
-          <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSort')}/>
+          <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')}/>
           <HeapSort arr={arr} isSorting={isSorting}/>
           <QuickSortDuplicate arr={arr} isSorting={isSorting}/>
           <QuickSortBase arr={arr} isSorting={isSorting}/>
