@@ -38,13 +38,14 @@ const BubbleSort:React.FC<ComponentProps<'div'> & {arr:BoxType[], isSorting:bool
         newArr[j + 1] = temp;
         setSwapped(true);
         swapped_ = true
-        children[j].classList.add('move-left');
+        children[j].classList.remove('compare');
+        children[j].classList.add('move-left', 'found');
         children[j + 1].classList.add('move-right');
       }
 
       const timeout = setTimeout(() => {
-        children[j].classList.remove('compare');
-        children[j + 1].classList.remove('compare');
+        children[j].classList.remove('compare', 'found');
+        children[j + 1].classList.remove('compare', 'found');
         setLocalArr(newArr);
         setJ(prev => {
           if (prev === localArr.length - i - 2) {
