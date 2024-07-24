@@ -51,7 +51,6 @@ const SelectionSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
           if (prevJ === localArr.length - 1){
             setI(prevI => {
               if (prevI === localArr.length - 2){
-                console.log('heeeeeeeey')
                 return -1
               };
               setCurrMin(prevI + 1);
