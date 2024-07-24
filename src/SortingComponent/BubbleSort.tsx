@@ -1,97 +1,73 @@
-import React, {ComponentProps, useEffect, useState} from 'react'
+import React, {ComponentProps, useEffect, useRef, useState} from 'react'
 import { BoxType } from '../App'
 
 const BubbleSort:React.FC<ComponentProps<'div'> & {arr:BoxType[], isSorting:boolean, onSortComplete:() => void}> = ({arr, isSorting, onSortComplete}) => {
     const [localArr, setLocalArr] = useState<BoxType[]>([...arr]);
-    const [currindex, setCurrIndex] = useState<number>(-1);
-    const [length, setLength] = useState<number>(arr.length);
-    const [localIsSorting, setLocalIsSorting] = useState<boolean>(isSorting);
+    const [i, setI] = useState<number>(0);
+    const [j, setJ] = useState<number>(0);
     const [swapped, setSwapped] = useState<boolean>(false);
-    console.log(currindex)
+    const [localIsSorting, setLocalIsSorting] = useState<boolean>(isSorting);
+    const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      if (currindex !== -2){
-        return
+      if (i === localArr.length - 1 || i === -1) {
+        setLocalIsSorting(false);
+        onSortComplete();
+        setI(0);
       }
-      setLocalIsSorting(false)
-      onSortComplete()
-      setCurrIndex(-1)
-    },[currindex])
+    }, [i, localArr.length, onSortComplete]);
 
     useEffect(() => {
       setLocalIsSorting(isSorting);
-    },[isSorting])
+    }, [isSorting]);
 
     useEffect(() => {
-      if (!localIsSorting || currindex < -1) {
+      if (!localIsSorting || !ref.current || i >= localArr.length - 1 || i < 0) {
         return;
       }
-    
-      let timeOut = undefined;
-    
-      if (currindex === -1) {
-        setLocalArr(prevArr => {
-          const newArr = [...prevArr];
-          if (newArr[0].val > newArr[1].val) {
-            newArr[0].className = 'move-left';
-            newArr[1].className = 'move-right';
-            setSwapped(true);
-          }
-          return newArr;
-        });
-        setCurrIndex(0);
-      } else {
-        timeOut = setTimeout(() => {
-          setLocalArr(prevArr => {
-            const newArr = [...prevArr];
-            if (newArr[currindex].val > newArr[currindex + 1].val) {
-              const temp = newArr[currindex];
-              newArr[currindex] = newArr[currindex + 1];
-              newArr[currindex + 1] = temp;
-            }
-    
-            newArr[currindex].className = '';
-            if (currindex < length - 2) {
-              if (newArr[currindex + 1].val > newArr[currindex + 2].val) {
-                newArr[currindex + 1].className = 'move-left';
-                newArr[currindex + 2].className = 'move-right';
-                setSwapped(true);
-              } else {
-                newArr[currindex + 1].className = '';
-                newArr[currindex + 2].className = '';
-              }
-              setCurrIndex(prev => prev + 1);
-            } else {
-              newArr[currindex + 1].className = '';
-              if (swapped) {
-                setLength(prev => {
-                  if (prev > 1) {
-                    setCurrIndex(0);
-                    return prev - 1;
-                  }
-                  setCurrIndex(-2);
-                  return arr.length;
-                });
-              } else {
-                setCurrIndex(-2);
-                setLength(arr.length);
-              }
-            }
-            return newArr;
-          });
-        }, 500);
+      const children = ref.current.children;
+      const newArr = [...localArr];
+      let swapped_ = swapped
+
+      children[j].classList.add('compare');
+      children[j + 1].classList.add('compare');
+
+      if (newArr[j].val > newArr[j + 1].val) {
+        const temp = newArr[j];
+        newArr[j] = newArr[j + 1];
+        newArr[j + 1] = temp;
+        setSwapped(true);
+        swapped_ = true
+        children[j].classList.add('move-left');
+        children[j + 1].classList.add('move-right');
       }
-    
-      return () => {
-        if (timeOut) {
-          clearTimeout(timeOut);
-        }
-      };
-    }, [currindex, localIsSorting, length, swapped]);
+
+      const timeout = setTimeout(() => {
+        children[j].classList.remove('compare');
+        children[j + 1].classList.remove('compare');
+        setLocalArr(newArr);
+        setJ(prev => {
+          if (prev === localArr.length - i - 2) {
+            setSwapped(false)
+            setI(prevI => {
+              if (!swapped_){
+                return -1
+              }
+              return prevI + 1
+            });
+            return 0;
+          }
+          return prev + 1;
+        });
+      }, 500);
+
+      return () => clearTimeout(timeout);
+    }, [i, j, localIsSorting, localArr, swapped]);
+
 
     return (
       <div>
-        <div className='container'>
+        <div ref={ref} className='container'>
           {localArr.map((num, i) => {
             return <div key={`box-bubble-${num.val}-${i}`} className={`box ${num.className}`} style={{height:`${10 * num.val}px`}}>
               {num.val}

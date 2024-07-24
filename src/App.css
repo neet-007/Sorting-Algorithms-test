@@ -13,6 +13,13 @@
     border-radius: 0.25rem;
     color:white;
 }
+.compare{
+    background-color: yellow;
+    color: black;
+}
+.found{
+    background-color: aquamarine;
+}
 .move-left {
     animation: move-left-animation forwards 500ms ease-in-out;
 }

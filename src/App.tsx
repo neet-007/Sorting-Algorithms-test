@@ -23,8 +23,8 @@ export type BoxType = {
 function App() {
   const [arr] = useState<BoxType[]>(Array(7).fill({val:0, className:''}).map(() => ({val:Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20), className:''})))
   const [isSorting, setIsSorting] = useState(false);
-  const [sortCompleted, setSortCompleted] = useState({ bubbleSort: false, quickSort: false });
-
+  const [sortCompleted, setSortCompleted] = useState({ bubbleSort: false});
+  console.log('base', arr)
   useEffect(() => {
     const condition = Object.values(sortCompleted).every((completed) => completed);
     if (condition){
@@ -34,7 +34,7 @@ function App() {
 
   const startSorting = () => {
     setIsSorting(true);
-    setSortCompleted({ bubbleSort: false, quickSort: false });
+    setSortCompleted({ bubbleSort: false });
     // Trigger sorting in child components
   };
 
@@ -45,7 +45,7 @@ function App() {
   const resetSorting = () => {
     // Reset sorting state in child components
     setIsSorting(false);
-    setSortCompleted({ bubbleSort: false, quickSort: false });
+    setSortCompleted({ bubbleSort: false });
   };
 
   const allSortsCompleted = Object.values(sortCompleted).every((completed) => completed);
