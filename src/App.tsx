@@ -13,50 +13,92 @@ import './App.css'
   * > -1 sorting
  */
 
+const ARR_MODES = ['random', 'sorted', 'reversed', 'with duplicates'] as const;
+const MODES = ['all' , 'bubbleSort' , 'selectionSort' , 'quickSortBase' , 'quickSortDuplicats' , 'heapSort'] as const;
+
 function App() {
-  const [arr] = useState<number[]>(Array(14).fill(Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)))
+  const [arr, setArr] = useState<number[]>(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse())
+  const [mode, setMode] = useState<'all' | 'bubbleSort' | 'selectionSort' | 'quickSortBase' | 'quickSortDuplicats' | 'heapSort'>('all');
   const [isSorting, setIsSorting] = useState(false);
-  const [sortCompleted, setSortCompleted] = useState({ quickSortDuplicates:false, bubbleSort:false, selectionSort:false });
+  const [sortCompleted, setSortCompleted] = useState({ quickSortDuplicats:false, bubbleSort:false, selectionSort:false, heapSort:false, quickSortBase:false });
 
   useEffect(() => {
-    const condition = Object.values(sortCompleted).every((completed) => completed);
+    let condition = false;
+    if (mode === 'all'){
+      condition = Object.values(sortCompleted).every((completed) => completed);
+    }else{
+      condition = sortCompleted[mode]
+    }
     if (condition){
       setIsSorting(false)
     }
   },Object.values(sortCompleted))
 
-  const startSorting = () => {
+  function handleArray(mode:'random' | 'sorted' | 'reversed' | 'with duplicates'){
+    if (mode === 'random'){
+      setArr(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
+    };
+    if (mode === 'sorted'){
+      setArr(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b));
+    };
+    if (mode === 'reversed'){
+      setArr(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse());
+    };
+    if (mode === 'with duplicates'){
+      setArr(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
+
+    };
+  };
+
+  function startSorting() {
     setIsSorting(true);
-    setSortCompleted({ quickSortDuplicates:false, bubbleSort:false, selectionSort:false });
+    setSortCompleted({ quickSortDuplicats:false, bubbleSort:false, selectionSort:false, heapSort:false, quickSortBase:false });
     // Trigger sorting in child components
   };
 
-  const handleSortCompletion = (sortName:string) => {
+  function handleSortCompletion(sortName:string) {
     setSortCompleted((prev) => ({ ...prev, [sortName]: true }));
   };
 
-  const resetSorting = () => {
+  function resetSorting() {
     // Reset sorting state in child components
     setIsSorting(false);
-    setSortCompleted({ quickSortDuplicates:false, bubbleSort:false, selectionSort:false });
+    setSortCompleted({ quickSortDuplicats:false, bubbleSort:false, selectionSort:false, heapSort:false, quickSortBase:false });
   };
 
-  const allSortsCompleted = Object.values(sortCompleted).every((completed) => completed);
+  const allSortsCompleted = mode === 'all' ? Object.values(sortCompleted).every((completed) => completed) : sortCompleted[mode];
 
   return(
     <div>
-      <div style={{display:'flex', flexDirection:'column', gap:'1rem'}}>
-        <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDuplicates')}/>
-          <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')}/>
-            <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')}/>
-        {/*
-        <HeapSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('heapSort')}/>
-        <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortBase')}/>
-        */
+      <div>
+        {MODES.map((val, idx) => (
+          <button disabled={isSorting} key={`modes-button-${val}-${idx}`} onClick={() => setMode(val)}>{val}</button>
+        ))}
+      </div>
+      <div className={`${mode === 'all' ? 'test-container' : ''}`}>
+        {(mode === 'all' || mode === 'bubbleSort')&&
+          <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')} time={200}/>
+        }
+        {(mode === 'all' || mode === 'selectionSort')&&
+          <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')} time={200}/>
+        }
+        {(mode === 'all' || mode === 'heapSort')&&
+          <HeapSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('heapSort')} time={200}/>
+        }
+        {(mode === 'all' || mode === 'quickSortBase')&&
+          <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortBase')} time={200}/>
+        }
+        {(mode === 'all' || mode === 'quickSortDuplicats')&&
+        <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDuplicates')} time={200}/>
         }
       </div>
-      <button onClick={startSorting} disabled={isSorting}>Start Sorting</button>
-      <button onClick={resetSorting} disabled={!allSortsCompleted}>Reset</button>
+      <div>
+        <button onClick={startSorting} disabled={isSorting}>Start Sorting</button>
+        {ARR_MODES.map((val, idx) => (
+          <button disabled={isSorting} key={`arr-modes-button-${val}-${idx}`} onClick={() => handleArray(val)}>{val}</button>
+        ))}
+        <button onClick={resetSorting} disabled={!allSortsCompleted}>Reset</button>
+      </div>
     </div>
   )
 }

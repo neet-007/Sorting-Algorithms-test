@@ -1,6 +1,6 @@
 import React, {ComponentProps, useEffect, useRef, useState} from 'react'
 
-const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void}> = ({arr, isSorting, onSortComplete}) => {
+const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void, time:number}> = ({arr, isSorting, onSortComplete, time}) => {
   const [localArr, setLocalArr] = useState<number[]>([...arr]);
   const [localIsSorting, setLocalIsSorting] = useState<boolean>(false);
   const [phase, setPhase] = useState<'none' | 'setUp' | 'loopBefore' | 'partition' | 'loopAfter' | 'finish'>('none');
@@ -12,6 +12,10 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
   const [top, setTop] = useState<number>(-1);
   const [stack, setStack] = useState<number[]>(Array(arr.length).fill(-1));
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setLocalArr([...arr]);
+  },[arr])
 
   useEffect(() => {
     if (phase !== 'finish'){
@@ -81,10 +85,9 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
           setPivotIdx(prev => prev + 1);
           setPhase('loopAfter');
         }
-      },500);
+      },time);
 
     }else if (phase === 'loopBefore'){
-
         if (top < 0){
           setPhase('finish')
           return
@@ -100,7 +103,6 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
         setPhase('partition');
 
     }else{
-
         const newStack = [...stack];
         let top_ = top;
         if (pivotIdx - 1 > lo){
@@ -137,7 +139,7 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
       <div ref={ref} className='container'>
         {localArr.map((num, i) => {
           return <div key={`box-bubble-${num}-${i}`} className='box' style={{height:`${10 * num}px`}}>
-            {num}
+
           </div>
           })}
         </div>

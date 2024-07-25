@@ -8,7 +8,7 @@ import React, {ComponentProps, useEffect, useState, useRef} from 'react'
  */
 
 
-const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void}> = ({arr, isSorting, onSortComplete}) => {
+const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void, time:number}> = ({arr, isSorting, onSortComplete, time}) => {
   const [localArr, setLocalArr] = useState<number[]>([...arr]);
   const [phase, setPhase] = useState<'none' | 'setUp' | 'loopBefore' | 'partition1' | 'partition2' | 'loopAfter' | 'finish'>('none');
   const [lo, setLo] = useState<number>(0);
@@ -18,6 +18,10 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
   const [top, setTop] = useState<number>(-1);
   const [stack, setStack] = useState<number[]>(Array(arr.length).fill(-1));
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setLocalArr([...arr]);
+  },[arr])
 
   useEffect(() => {
     if (phase !== 'finish'){
@@ -101,7 +105,7 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
           });
           setPhase('partition2');
         };
-      },500);
+      },time);
 
 
     }else if (phase === 'partition2'){
@@ -142,7 +146,7 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
           setPhase('loopAfter');
           setJ(0);
         };
-      },500)
+      },time)
     }else if (phase === 'loopBefore'){
         if (top < 0){
           setPhase('finish')
@@ -191,10 +195,13 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
 
   return (
     <div>
+      <div>
+        quick sort3
+      </div>
       <div ref={ref} className='container'>
         {localArr.map((num, i) => {
           return <div key={`box-bubble-${num}-${i}`} className='box' style={{height:`${10 * num}px`}}>
-            {num}
+
           </div>
           })}
         </div>

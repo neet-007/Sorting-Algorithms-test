@@ -8,13 +8,17 @@ function getChild(index:number, dir:'l' | 'r'){
   };
 };
 
-const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void}> = ({arr, isSorting, onSortComplete}) => {
+const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void, time:number}> = ({arr, isSorting, onSortComplete, time}) => {
     const [localArr, setLocalArr] = useState<number[]>([...arr]);
     const [length, setLength] = useState<number>(arr.length);
     const [currIndex, setCurrIndex] = useState<number>(Math.floor(arr.length / 2) + 1);
     const [prevPhase, setPrevPhase] = useState<'none' | 'buildHeap' | 'getMax' | 'heapifyDown' | 'sort' | 'finish'>('none');
     const [phase, setPhase] = useState<'none' | 'buildHeap' | 'getMax' | 'heapifyDown' | 'sort' | 'finish'>('none');
     const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      setLocalArr([...arr]);
+    },[arr])
 
     useEffect(() => {
       if (isSorting){
@@ -108,7 +112,7 @@ const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean
             setLocalArr(newArr);
             setCurrIndex(bigIndex);
           }
-        },500);
+        },time);
 
 
       }else if (phase === 'getMax'){
@@ -132,7 +136,7 @@ const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean
           setPrevPhase('getMax');
           setPhase('heapifyDown');
           setCurrIndex(0);
-        },500)
+        },time)
       }else{
         setPrevPhase('sort');
         if (length <= 0){
@@ -155,7 +159,7 @@ const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean
         <div ref={ref} className='container'>
           {localArr.map((num, i) => {
             return <div key={`box-bubble-${num}-${i}`} className='box' style={{height:`${10 * num}px`}}>
-              {num}
+
             </div>
             })}
           </div>

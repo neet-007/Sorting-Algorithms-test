@@ -1,12 +1,16 @@
 import React, {ComponentProps, useEffect, useRef, useState} from 'react'
 
-const SelectionSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void}> = ({arr, isSorting, onSortComplete}) => {
+const SelectionSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void, time:number}> = ({arr, isSorting, onSortComplete, time}) => {
     const [localArr, setLocalArr] = useState<number[]>([...arr])
     const [i, setI] = useState<number>(0);
     const [j, setJ] = useState<number>(1);
     const [currMin, setCurrMin] = useState<number>(0);
     const [localIsSorting, setLocalIsSorting] = useState<boolean>(isSorting);
     const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      setLocalArr([...arr]);
+    },[arr])
 
     useEffect(() => {
       if (i !== -1){
@@ -61,7 +65,7 @@ const SelectionSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
 
           return prevJ + 1
         })
-      },500);
+      },time);
 
 
       return () => clearTimeout(timeOut);
@@ -73,7 +77,6 @@ const SelectionSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
         <div ref={ref} className='container'>
           {localArr.map((num, i) => {
             return <div key={`box-bubble-${num}-${i}`} className='box' style={{height:`${10 * num}px`}}>
-              {num}
             </div>
             })}
           </div>
