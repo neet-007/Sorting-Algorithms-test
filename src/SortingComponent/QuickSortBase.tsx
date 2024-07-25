@@ -81,10 +81,10 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
           setPivotIdx(prev => prev + 1);
           setPhase('loopAfter');
         }
-      },2000);
+      },500);
 
     }else if (phase === 'loopBefore'){
-      timeOut = setTimeout(() => {
+
         if (top < 0){
           setPhase('finish')
           return
@@ -98,9 +98,9 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
         setTop(top_ - 1);
         setPivotIdx(stack[top_] - 1);
         setPhase('partition');
-      },2000)
+
     }else{
-      timeOut = setTimeout(() => {
+
         const newStack = [...stack];
         let top_ = top;
         if (pivotIdx - 1 > lo){
@@ -120,7 +120,7 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
         setTop(top_);
         setStack(newStack);
         setPhase('loopBefore');
-      },2000)
+
     };
 
     return () => {

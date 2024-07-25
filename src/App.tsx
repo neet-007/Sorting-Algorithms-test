@@ -16,7 +16,7 @@ import './App.css'
 function App() {
   const [arr] = useState<number[]>(Array(7).fill(0).map(() => (Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20))))
   const [isSorting, setIsSorting] = useState(false);
-  const [sortCompleted, setSortCompleted] = useState({ quickSort: false});
+  const [sortCompleted, setSortCompleted] = useState({ heapSort: false});
 
   useEffect(() => {
     const condition = Object.values(sortCompleted).every((completed) => completed);
@@ -27,7 +27,7 @@ function App() {
 
   const startSorting = () => {
     setIsSorting(true);
-    setSortCompleted({ quickSort: false });
+    setSortCompleted({ heapSort: false });
     // Trigger sorting in child components
   };
 
@@ -38,7 +38,7 @@ function App() {
   const resetSorting = () => {
     // Reset sorting state in child components
     setIsSorting(false);
-    setSortCompleted({ quickSort: false });
+    setSortCompleted({ heapSort: false });
   };
 
   const allSortsCompleted = Object.values(sortCompleted).every((completed) => completed);
@@ -46,12 +46,12 @@ function App() {
   return(
     <div>
       <div style={{display:'flex', flexDirection:'column', gap:'1rem'}}>
-        <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSort')}/>
+        <HeapSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('heapSort')}/>
         {/*
+        <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDupicates')}/>
           <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')}/>
           <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')}/>
-          <HeapSort arr={arr} isSorting={isSorting}/>
-          <QuickSortDuplicate arr={arr} isSorting={isSorting}/>
+          <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSort')}/>
         */
         }
       </div>
