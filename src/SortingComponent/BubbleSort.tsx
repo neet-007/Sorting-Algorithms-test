@@ -67,6 +67,7 @@ const BubbleSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boole
 
     return (
       <div>
+        <div>bubble sort</div>
         <div ref={ref} className='container'>
           {localArr.map((num, i) => {
             return <div key={`box-bubble-${num}-${i}`} className='box' style={{height:`${10 * num}px`}}>

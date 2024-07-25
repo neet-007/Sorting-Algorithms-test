@@ -151,6 +151,7 @@ const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean
 
     return (
       <div>
+        <div>heap sort</div>
         <div ref={ref} className='container'>
           {localArr.map((num, i) => {
             return <div key={`box-bubble-${num}-${i}`} className='box' style={{height:`${10 * num}px`}}>

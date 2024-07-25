@@ -14,9 +14,9 @@ import './App.css'
  */
 
 function App() {
-  const [arr] = useState<number[]>(Array(7).fill(0).map(() => (Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20))))
+  const [arr] = useState<number[]>(Array(14).fill(Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)))
   const [isSorting, setIsSorting] = useState(false);
-  const [sortCompleted, setSortCompleted] = useState({ heapSort: false});
+  const [sortCompleted, setSortCompleted] = useState({ quickSortDuplicates:false, bubbleSort:false, selectionSort:false });
 
   useEffect(() => {
     const condition = Object.values(sortCompleted).every((completed) => completed);
@@ -27,7 +27,7 @@ function App() {
 
   const startSorting = () => {
     setIsSorting(true);
-    setSortCompleted({ heapSort: false });
+    setSortCompleted({ quickSortDuplicates:false, bubbleSort:false, selectionSort:false });
     // Trigger sorting in child components
   };
 
@@ -38,7 +38,7 @@ function App() {
   const resetSorting = () => {
     // Reset sorting state in child components
     setIsSorting(false);
-    setSortCompleted({ heapSort: false });
+    setSortCompleted({ quickSortDuplicates:false, bubbleSort:false, selectionSort:false });
   };
 
   const allSortsCompleted = Object.values(sortCompleted).every((completed) => completed);
@@ -46,12 +46,12 @@ function App() {
   return(
     <div>
       <div style={{display:'flex', flexDirection:'column', gap:'1rem'}}>
-        <HeapSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('heapSort')}/>
-        {/*
-        <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDupicates')}/>
+        <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDuplicates')}/>
           <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')}/>
-          <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')}/>
-          <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSort')}/>
+            <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')}/>
+        {/*
+        <HeapSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('heapSort')}/>
+        <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortBase')}/>
         */
         }
       </div>
