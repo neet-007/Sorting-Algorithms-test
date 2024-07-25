@@ -74,6 +74,8 @@ const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean
           children[leftChild].classList.add('found');
           bigIndex = leftChild;
           found = true;
+        }
+        if (leftChild < length){
           children[leftChild].classList.remove('compare');
         }
 
@@ -87,8 +89,10 @@ const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean
           children[rigthChild].classList.add('found');
           bigIndex = rigthChild;
           found = true;
-          children[rigthChild].classList.remove('compare');
         };
+        if (rigthChild < length){
+          children[rigthChild].classList.remove('compare');
+        }
 
         timeOut = setTimeout(() => {
           children[currIndex].classList.remove('compare');
