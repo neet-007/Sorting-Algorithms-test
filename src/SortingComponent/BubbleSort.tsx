@@ -28,41 +28,49 @@ const BubbleSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boole
       if (!localIsSorting || !ref.current || i >= localArr.length - 1 || i < 0) {
         return;
       }
+
       const children = ref.current.children;
       const newArr = [...localArr];
-      let swapped_ = swapped
 
-      children[j].classList.add('compare');
-      children[j + 1].classList.add('compare');
+      let swapped_ = swapped;
+      let found = false;
 
-      if (newArr[j] > newArr[j + 1]) {
-        const temp = newArr[j];
-        newArr[j] = newArr[j + 1];
-        newArr[j + 1] = temp;
-        setSwapped(true);
-        swapped_ = true
-        children[j].classList.remove('compare');
-        children[j].classList.add('move-left', 'found');
-        children[j + 1].classList.add('move-right');
-      }
+      if (j < newArr.length - i - 1){
+        children[j].classList.add('compare');
+        children[j + 1].classList.add('compare');
+
+        if (newArr[j] > newArr[j + 1]) {
+          swapped_ = true
+          setSwapped(true);
+          found = true;
+          children[j].classList.remove('compare');
+          children[j].classList.add('move-left', 'found');
+          children[j + 1].classList.add('move-right');
+        };
+      };
 
       const timeout = setTimeout(() => {
-        children[j].classList.remove('compare', 'found');
-        children[j + 1].classList.remove('compare', 'found');
-        setLocalArr(newArr);
-        setJ(prev => {
-          if (prev === localArr.length - i - 2) {
-            setSwapped(false)
-            setI(prevI => {
-              if (!swapped_){
-                return -1
-              }
-              return prevI + 1
-            });
-            return 0;
-          }
-          return prev + 1;
-        });
+        if (j < newArr.length - i - 1){
+          children[j].classList.remove('compare', 'found');
+          children[j + 1].classList.remove('compare', 'found');
+          if (found){
+            const temp = newArr[j];
+            newArr[j] = newArr[j + 1];
+            newArr[j + 1] = temp;
+
+            setLocalArr(newArr);
+          };
+          setJ(prev => prev + 1);
+        }else{
+              setSwapped(false);
+              setI(prevI => {
+                if (!swapped_){
+                  return -1
+                }
+                return prevI + 1
+              });
+              setJ(0);
+        };
       }, time);
 
       return () => clearTimeout(timeout);

@@ -13,7 +13,7 @@ import './App.css'
   * > -1 sorting
  */
 
-const ARR_COUNT = 7;
+const ARR_COUNT = 30;
 const ARR_MODES = ['random', 'sorted', 'reversed', 'with duplicates'] as const;
 const MODES = ['all' , 'bubbleSort' , 'selectionSort' , 'quickSortBase' , 'quickSortDuplicats' , 'heapSort'] as const;
 

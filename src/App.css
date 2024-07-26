@@ -25,10 +25,10 @@
     background-color: aquamarine;
 }
 .move-left {
-    animation: move-left-animation forwards 500ms ease-in-out;
+    animation: move-left-animation forwards 200ms ease-in-out;
 }
 .move-right {
-    animation: move-right-animation forwards 500ms ease-in-out;
+    animation: move-right-animation forwards 200ms ease-in-out;
 }
 
 @keyframes move-left-animation{
