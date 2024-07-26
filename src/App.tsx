@@ -13,11 +13,12 @@ import './App.css'
   * > -1 sorting
  */
 
+const ARR_COUNT = 7;
 const ARR_MODES = ['random', 'sorted', 'reversed', 'with duplicates'] as const;
 const MODES = ['all' , 'bubbleSort' , 'selectionSort' , 'quickSortBase' , 'quickSortDuplicats' , 'heapSort'] as const;
 
 function App() {
-  const [arr, setArr] = useState<number[]>(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse())
+  const [arr, setArr] = useState<number[]>(Array(ARR_COUNT).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse())
   const [mode, setMode] = useState<'all' | 'bubbleSort' | 'selectionSort' | 'quickSortBase' | 'quickSortDuplicats' | 'heapSort'>('all');
   const [isSorting, setIsSorting] = useState(false);
   const [sortCompleted, setSortCompleted] = useState({ quickSortDuplicats:false, bubbleSort:false, selectionSort:false, heapSort:false, quickSortBase:false });
@@ -36,16 +37,16 @@ function App() {
 
   function handleArray(mode:'random' | 'sorted' | 'reversed' | 'with duplicates'){
     if (mode === 'random'){
-      setArr(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
+      setArr(Array(ARR_COUNT).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
     };
     if (mode === 'sorted'){
-      setArr(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b));
+      setArr(Array(ARR_COUNT).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b));
     };
     if (mode === 'reversed'){
-      setArr(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse());
+      setArr(Array(ARR_COUNT).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse());
     };
     if (mode === 'with duplicates'){
-      setArr(Array(30).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
+      setArr(Array(ARR_COUNT).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
 
     };
   };

@@ -32,39 +32,47 @@ const SelectionSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
 
       const children = ref.current.children;
       const newArr = [...localArr];
-      children[currMin].classList.add('compare');
-      children[j].classList.add('compare');
+      let found = false;
 
-      if (newArr[j] < newArr[currMin]){
-        children[currMin].classList.remove('found');
-        children[j].classList.remove('compare');
-        children[j].classList.add('found')
-        setCurrMin(j);
-      }
-      if (j === newArr.length - 1){
-        const temp = newArr[i];
-        newArr[i] = newArr[currMin];
-        newArr[currMin] = temp;
-        setLocalArr(newArr);
+      if (j < newArr.length){
+
+        children[currMin].classList.add('compare');
+        children[j].classList.add('compare');
+
+        if (newArr[j] < newArr[currMin]){
+          children[currMin].classList.remove('found');
+          children[j].classList.remove('compare');
+          children[j].classList.add('found');
+          found = true;
+        };
       }
 
       const timeOut = setTimeout(() => {
-        children[currMin].classList.remove('compare')
-        children[j].classList.remove('compare')
-        setJ(prevJ => {
-          if (prevJ === localArr.length - 1){
-            setI(prevI => {
-              if (prevI === localArr.length - 2){
-                return -1
-              };
-              setCurrMin(prevI + 1);
-              return prevI + 1
-            })
-            return i + 2
-          };
+        if (j < newArr.length){
+          children[currMin].classList.remove('compare', 'found');
+          children[j].classList.remove('compare', 'found');
+          setJ(prevJ => {
+            if (found){
+              setCurrMin(prevJ);
+            };
+            return prevJ + 1
+          })
 
-          return prevJ + 1
-        })
+        }else{
+          const temp = newArr[i];
+          newArr[i] = newArr[currMin];
+          newArr[currMin] = temp;
+          setLocalArr(newArr);
+          setI(prevI => {
+            if (prevI === localArr.length - 2){
+              return - 1
+            };
+            setJ(prevI + 2);
+            setCurrMin(prevI + 1);
+
+            return prevI + 1;
+          })
+        };
       },time);
 
 
