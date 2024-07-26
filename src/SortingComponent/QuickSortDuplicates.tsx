@@ -3,20 +3,20 @@ import React, {ComponentProps, useEffect, useState, useRef} from 'react'
 /**
  left = j
  pivot = pivotIdx[0]
- prev index = pivotIdx[1]
- post index = pivotIdx[0]
+ lt = pivotIdx[1]
+ gt = pivotIdx[2]
  */
 
 
 const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void, time:number}> = ({arr, isSorting, onSortComplete, time}) => {
   const [localArr, setLocalArr] = useState<number[]>([...arr]);
-  const [phase, setPhase] = useState<'none' | 'setUp' | 'loopBefore' | 'partition1' | 'partition2' | 'loopAfter' | 'finish'>('none');
+  const [phase, setPhase] = useState<'none' | 'setUp' | 'loopBefore' | 'partition' | 'loopAfter' | 'finish'>('none');
   const [lo, setLo] = useState<number>(0);
   const [hi, setHi] = useState<number>(arr.length - 1);
   const [j, setJ] = useState<number>(0);
   const [pivotIdx, setPivotIdx] = useState<[number, number]>([-1, -1]);
-  const [top, setTop] = useState<number>(-1);
-  const [stack, setStack] = useState<number[]>(Array(arr.length).fill(-1));
+  const [pivotVal, setPivotVal] = useState<[number, number]>([-1, -1]);
+  const [stack, setStack] = useState<number[]>([]);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,144 +45,106 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
     let timeOut = undefined;
 
     if (phase === 'setUp'){
-      let top_ = top;
       const newStack = [...stack];
 
-      top_ += 1;
-      newStack[top_] = lo;
-      top_ += 1;
-      newStack[top_] = hi;
-
-      setTop(top_);
+      newStack.push(lo);
+      newStack.push(hi);
       setStack(newStack);
       setPhase('loopBefore');
 
-    }else if (phase === 'partition1'){
+    }else if (phase === 'partition'){
       const newArr = [...localArr];
       const children = ref.current.children;
-      let found = false;
+      let lower = false;
+      let higher = false;
 
-      if (j < hi){
-        children[j + 1].classList.add('compare');
-        children[pivotIdx[0]].classList.add('compare');
-        if (newArr[j + 1] < newArr[pivotIdx[0]]){
-          children[j + 1].classList.remove('compare');
-          children[j + 1].classList.add('found');
-          found = true;
+      if (j <= pivotIdx[1]){
+        children[j].classList.add('compare');
+        children[pivotVal[0]].classList.add('compare');
+
+        if (newArr[j] < pivotVal[1]){
+          children[j].classList.remove('compare');
+          children[j].classList.add('found');
+          lower = true;
+        }else if (newArr[j] > pivotVal[1]){
+          children[j].classList.remove('compare');
+          children[j].classList.add('found');
+          higher = true;
         };
       };
 
       timeOut = setTimeout(() => {
-        if (j < hi){
-          children[j + 1].classList.remove('compare', 'found');
-          children[pivotIdx[0]].classList.remove('compare');
-          if (found){
-            const temp = newArr[j + 1];
-            newArr[j + 1] = newArr[pivotIdx[1] + 1];
-            newArr[pivotIdx[1] + 1] = temp;
+        if (j <= pivotIdx[1]){
+          children[j].classList.remove('compare', 'found');
+          children[pivotVal[0]].classList.remove('compare');
+          if (lower){
+            const temp = newArr[pivotIdx[0]];
+            newArr[pivotIdx[0]] = newArr[j];
+            newArr[j] = temp;
 
             setLocalArr(newArr);
-            setPivotIdx(prev => {
-              const newPrev = [...prev] as [number, number];
-              newPrev[1] += 1;
+            setJ(prev => prev + 1);
+            setPivotIdx(prevPivot => {
+              const newPrevPivot = [...prevPivot] as [number, number];
+              newPrevPivot[0] += 1;
 
-              return newPrev
+              return newPrevPivot;
             });
+          }else if (higher){
+            const temp = newArr[pivotIdx[1]];
+            newArr[pivotIdx[1]] = newArr[j];
+            newArr[j] = temp;
+
+            setLocalArr(newArr);
+            setPivotIdx(prevPivot => {
+              const newPrevPivot = [...prevPivot] as [number, number];
+              newPrevPivot[1] -= 1;
+
+              return newPrevPivot
+            });
+          }else{
+            setJ(prev => prev + 1);
           };
-        setJ(prev => prev + 1);
+
         }else{
-          const temp = newArr[pivotIdx[0]];
-          newArr[pivotIdx[0]] = newArr[pivotIdx[1]];
-          newArr[pivotIdx[1]] = temp;
-
-          setLocalArr(newArr);
-          setPivotIdx(prevPivot => {
-            const newPrevPivot = [...prevPivot] as [number, number];
-            setJ(prevPivot[0] + 1);
-            prevPivot[0] = prevPivot[1];
-
-            return newPrevPivot;
-          });
-          setPhase('partition2');
+          setPhase('loopAfter');
         };
       },time);
 
-
-    }else if (phase === 'partition2'){
-      const newArr = [...localArr];
-      const children = ref.current.children;
-      let found = false;
-
-      if (j < hi){
-
-        children[j].classList.add('compare');
-        children[pivotIdx[0]].classList.add('compare');
-
-        if (newArr[j] === newArr[pivotIdx[0]]){
-          children[j].classList.remove('compare');
-          children[j].classList.add('found');
-          found = true;
-        };
-      }
-
-      timeOut = setTimeout(() => {
-        if (j < hi){
-          children[j].classList.remove('compare', 'found');
-          children[pivotIdx[0]].classList.remove('compare');
-          if (found){
-            const temp = newArr[j];
-            newArr[j] = newArr[pivotIdx[1] + 1];
-            newArr[pivotIdx[1] + 1] = temp;
-
-            setPivotIdx(prevPivot => {
-              const newPivot = [...prevPivot] as [number, number];
-              newPivot[1] += 1;
-
-              return newPivot;
-            })
-          };
-          setJ(prev => prev + 1);
-        }else{
-          setPhase('loopAfter');
-          setJ(0);
-        };
-      },time)
     }else if (phase === 'loopBefore'){
-        if (top < 0){
+        const newStack = [...stack];
+        if (newStack.length <= 0){
           setPhase('finish')
           return
         }
-        let top_ = top;
-        setHi(stack[top_]);
-        top_ -= 1;
-        setLo(stack[top_]);
-        setJ(stack[top_]);
-        setPivotIdx([stack[top_], stack[top_]]);
-        setTop(top_ - 1);
-        setPhase('partition1');
 
+        if (newStack[newStack.length - 2] >= newStack[newStack.length - 1]){
+          newStack.pop();
+          newStack.pop();
+          setStack(newStack);
+
+          return
+        };
+        setLo(newStack[newStack.length - 2]);
+        setJ(newStack[newStack.length - 2]);
+        setHi(newStack[newStack.length - 1]);
+        setPivotVal([newStack[newStack.length - 2], localArr[newStack[newStack.length - 2]]])
+        setPivotIdx([newStack[newStack.length - 2], newStack[newStack.length - 1]]);
+        newStack.pop();
+        newStack.pop();
+
+        setStack(newStack);
+        setPhase('partition');
     }else{
         const newStack = [...stack];
-        let top_ = top;
-        const [pivotIdx1, pivotIdx2] = pivotIdx;
-        if (pivotIdx1 - 1 > lo){
-          top_ += 1;
-          newStack[top_] = lo;
-          top_ += 1;
-          newStack[top_] = pivotIdx1 - 1;
-        };
+        const [lt, gt] = pivotIdx;
 
-        if (pivotIdx2 + 1 < hi){
-          top_ += 1;
-          newStack[top_] = pivotIdx2 + 1;
-          top_ += 1;
-          newStack[top_] = hi;
-        };
-
-        setTop(top_);
+        newStack.push(lo);
+        newStack.push(lt - 1);
+        newStack.push(gt + 1);
+        newStack.push(hi);
         setStack(newStack);
         setPhase('loopBefore');
-
     };
 
     return () => {
@@ -191,7 +153,7 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
       };
     }
 
-  },[phase, lo, hi, pivotIdx, top, j]);
+  },[phase, lo, hi, pivotIdx, top, j, stack.length]);
 
   return (
     <div>
