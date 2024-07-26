@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import BubbleSort from './SortingComponent/BubbleSort'
 import HeapSort from './SortingComponent/HeapSort'
 import QuickSortBase from './SortingComponent/QuickSortBase'
@@ -13,15 +13,19 @@ import './App.css'
   * > -1 sorting
  */
 
-const ARR_COUNT = 30;
 const ARR_MODES = ['random', 'sorted', 'reversed', 'with duplicates'] as const;
 const MODES = ['all' , 'bubbleSort' , 'selectionSort' , 'quickSortBase' , 'quickSortDuplicates' , 'heapSort'] as const;
 
 function App() {
-  const [arr, setArr] = useState<number[]>(Array(ARR_COUNT).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse())
+  const [arrSize, setArrSize] = useState<number>(2);
+  const [arr, setArr] = useState<number[]>(Array(arrSize).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse())
+  const [arrMode, setArrMode] = useState<'random' | 'sorted' | 'reversed' | 'with duplicates'>('random')
   const [mode, setMode] = useState<'all' | 'bubbleSort' | 'selectionSort' | 'quickSortBase' | 'quickSortDuplicates' | 'heapSort'>('all');
   const [isSorting, setIsSorting] = useState(false);
   const [sortCompleted, setSortCompleted] = useState({ quickSortDuplicates:false, bubbleSort:false, selectionSort:false, heapSort:false, quickSortBase:false });
+  const [speed, setSpeed] = useState<number>(100);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const arrSizeRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let condition = false;
@@ -35,18 +39,42 @@ function App() {
     }
   },Object.values(sortCompleted))
 
-  function handleArray(mode:'random' | 'sorted' | 'reversed' | 'with duplicates'){
-    if (mode === 'random'){
-      setArr(Array(ARR_COUNT).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
+  useEffect(() => {
+    handleArray();
+  },[arrSize, arrMode])
+
+  function handleArrSize(){
+    if (!arrSizeRef.current){
+      return
     };
-    if (mode === 'sorted'){
-      setArr(Array(ARR_COUNT).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b));
+    if (Number(arrSizeRef.current.value) > 50){
+      alert('max val is 50');
+      return
     };
-    if (mode === 'reversed'){
-      setArr(Array(ARR_COUNT).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse());
+
+    setArrSize(Number(arrSizeRef.current.value));
+  }
+
+  function handleSpeed(){
+    if (!inputRef.current){
+      return
     };
-    if (mode === 'with duplicates'){
-      setArr(Array(ARR_COUNT).fill(Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
+
+    setSpeed(Number(inputRef.current.value));
+  };
+
+  function handleArray(){
+    if (arrMode === 'random'){
+      setArr(Array(arrSize).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
+    };
+    if (arrMode === 'sorted'){
+      setArr(Array(arrSize).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b));
+    };
+    if (arrMode === 'reversed'){
+      setArr(Array(arrSize).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse());
+    };
+    if (arrMode === 'with duplicates'){
+      setArr(Array(arrSize).fill(Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)));
 
     };
   };
@@ -78,27 +106,37 @@ function App() {
       </div>
       <div className={`${mode === 'all' ? 'test-container' : ''}`}>
         {(mode === 'all' || mode === 'bubbleSort')&&
-          <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')} time={200}/>
+          <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')} time={speed}/>
         }
         {(mode === 'all' || mode === 'selectionSort')&&
-          <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')} time={200}/>
+          <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')} time={speed}/>
         }
         {(mode === 'all' || mode === 'heapSort')&&
-          <HeapSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('heapSort')} time={200}/>
+          <HeapSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('heapSort')} time={speed}/>
         }
         {(mode === 'all' || mode === 'quickSortBase')&&
-          <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortBase')} time={200}/>
+          <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortBase')} time={speed}/>
         }
         {(mode === 'all' || mode === 'quickSortDuplicates')&&
-        <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDuplicates')} time={200}/>
+        <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDuplicates')} time={speed}/>
         }
       </div>
       <div>
         <button onClick={startSorting} disabled={isSorting}>Start Sorting</button>
         {ARR_MODES.map((val, idx) => (
-          <button disabled={isSorting} key={`arr-modes-button-${val}-${idx}`} onClick={() => handleArray(val)}>{val}</button>
+          <button disabled={isSorting} key={`arr-modes-button-${val}-${idx}`} onClick={() => setArrMode(val)}>{val}</button>
         ))}
         <button onClick={resetSorting} disabled={!allSortsCompleted}>Reset</button>
+        <div>
+          <label htmlFor="speed-input">set speed</label>
+          <input type="number" min={0} name='speed-input' id='speed-input' ref={inputRef} placeholder='in mill seconds'/>
+          <button disabled={isSorting} onClick={handleSpeed}>change speed</button>
+        </div>
+        <div>
+          <label htmlFor="arr-size-input">set data size</label>
+          <input type="number" min={0} max={50} name='arr-size-input' id='arr-size-input' ref={arrSizeRef} placeholder='max is 50'/>
+          <button disabled={isSorting} onClick={handleArrSize}>change data size</button>
+        </div>
       </div>
     </div>
   )

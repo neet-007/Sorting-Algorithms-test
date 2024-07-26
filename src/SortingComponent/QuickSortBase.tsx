@@ -5,16 +5,19 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
   const [localIsSorting, setLocalIsSorting] = useState<boolean>(false);
   const [phase, setPhase] = useState<'none' | 'setUp' | 'loopBefore' | 'partition' | 'loopAfter' | 'finish'>('none');
   const [lo, setLo] = useState<number>(0);
-  const [hi, setHi] = useState<number>(arr.length - 1);
+  const [hi, setHi] = useState<number>(localArr.length - 1);
   const [j, setJ] = useState<number>(0);
   const [pivotIdx, setPivotIdx] = useState<number>(-1);
-  const [pivotVal, setPivotVal] = useState<number>(arr[arr.length - 1]);
+  const [pivotVal, setPivotVal] = useState<number>(localArr[localArr.length - 1]);
   const [top, setTop] = useState<number>(-1);
-  const [stack, setStack] = useState<number[]>(Array(arr.length).fill(-1));
+  const [stack, setStack] = useState<number[]>(Array(localArr.length).fill(-1));
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setLocalArr([...arr]);
+    setHi(arr.length - 1);
+    setPivotVal(arr[arr.length - 1]);
+    setStack(Array(arr.length).fill(-1));
   },[arr])
 
   useEffect(() => {
@@ -23,6 +26,13 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
     };
     setLocalIsSorting(false);
     onSortComplete();
+    setLo(0);
+    setHi(localArr.length - 1);
+    setJ(0);
+    setPivotIdx(-1);
+    setPivotVal(localArr[localArr.length - 1]);
+    setTop(-1);
+    setStack(Array(localArr.length).fill(-1));
     setPhase('none');
   },[phase])
 

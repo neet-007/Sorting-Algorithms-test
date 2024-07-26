@@ -17,6 +17,8 @@ const BubbleSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boole
         setLocalIsSorting(false);
         onSortComplete();
         setI(0);
+        setI(0);
+        setSwapped(false);
       }
     }, [i, localArr.length, onSortComplete]);
 

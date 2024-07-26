@@ -2,9 +2,10 @@ import React, {ComponentProps, useEffect, useState, useRef} from 'react'
 
 /**
  left = j
- pivot = pivotIdx[0]
- lt = pivotIdx[1]
- gt = pivotIdx[2]
+ pivotIdx = pivotVal[0]
+ pivotVal = pivotVal[1]
+ lt = pivotIdx[0]
+ gt = pivotIdx[1]
  */
 
 
@@ -12,7 +13,7 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
   const [localArr, setLocalArr] = useState<number[]>([...arr]);
   const [phase, setPhase] = useState<'none' | 'setUp' | 'loopBefore' | 'partition' | 'loopAfter' | 'finish'>('none');
   const [lo, setLo] = useState<number>(0);
-  const [hi, setHi] = useState<number>(arr.length - 1);
+  const [hi, setHi] = useState<number>(localArr.length - 1);
   const [j, setJ] = useState<number>(0);
   const [pivotIdx, setPivotIdx] = useState<[number, number]>([-1, -1]);
   const [pivotVal, setPivotVal] = useState<[number, number]>([-1, -1]);
@@ -21,6 +22,7 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
 
   useEffect(() => {
     setLocalArr([...arr]);
+    setHi(arr.length - 1);
   },[arr])
 
   useEffect(() => {
@@ -29,6 +31,12 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
     };
     onSortComplete();
     setPhase('none');
+    setLo(0);
+    setHi(localArr.length - 1);
+    setJ(0);
+    setPivotIdx([-1, -1]);
+    setPivotVal([-1, -1]);
+    setStack([]);
   },[phase])
 
   useEffect(() => {

@@ -10,14 +10,16 @@ function getChild(index:number, dir:'l' | 'r'){
 
 const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean, onSortComplete:() => void, time:number}> = ({arr, isSorting, onSortComplete, time}) => {
     const [localArr, setLocalArr] = useState<number[]>([...arr]);
-    const [length, setLength] = useState<number>(arr.length);
-    const [currIndex, setCurrIndex] = useState<number>(Math.floor(arr.length / 2) + 1);
+    const [length, setLength] = useState<number>(localArr.length);
+    const [currIndex, setCurrIndex] = useState<number>(Math.floor(localArr.length / 2) + 1);
     const [prevPhase, setPrevPhase] = useState<'none' | 'buildHeap' | 'getMax' | 'heapifyDown' | 'sort' | 'finish'>('none');
     const [phase, setPhase] = useState<'none' | 'buildHeap' | 'getMax' | 'heapifyDown' | 'sort' | 'finish'>('none');
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       setLocalArr([...arr]);
+      setLength(arr.length);
+      setCurrIndex(Math.floor(arr.length / 2) + 1);
     },[arr])
 
     useEffect(() => {
@@ -34,7 +36,8 @@ const HeapSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:boolean
       onSortComplete()
       setPrevPhase('finish');
       setPhase('none');
-      setLength(arr.length);
+      setCurrIndex(Math.floor(localArr.length / 2) + 1);
+      setLength(localArr.length);
     },[phase])
 
     useEffect(() => {

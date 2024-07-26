@@ -16,8 +16,11 @@ const SelectionSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
       if (i !== -1){
         return
       }
-      setLocalIsSorting(false)
-      onSortComplete()
+      setLocalIsSorting(false);
+      onSortComplete();
+      setI(0);
+      setJ(0);
+      setCurrMin(0);
     },[i])
 
     useEffect(() => {
