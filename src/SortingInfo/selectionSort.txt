@@ -1,0 +1,13 @@
+Pseudo Code:
+1. Iterate through the array.
+2. Find the minimum element in the remaining unsorted array.
+3. Swap it with the first unsorted element.
+4. Move the boundary of the unsorted subarray one element to the right.
+5. Repeat until the array is sorted.
+---
+Information:
+Memory: O(1)
+Time: O(n^2)
+Type: Comparison-based
+Best Use Case: Small arrays or when memory is a concern.
+

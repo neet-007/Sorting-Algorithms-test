@@ -84,7 +84,7 @@ const SelectionSort:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
 
     return (
       <div>
-        <div>selection sort</div>
+        <div className='h2'>selection sort</div>
         <div ref={ref} className='container'>
           {localArr.map((num, i) => {
             return <div key={`box-bubble-${num}-${i}`} className='box' style={{height:`${10 * num}px`}}>

@@ -145,7 +145,7 @@ const QuickSortBase:React.FC<ComponentProps<'div'> & {arr:number[], isSorting:bo
 
   return (
     <div>
-      <div>quick sort base</div>
+      <div className='h2'>quick sort base</div>
       <div ref={ref} className='container'>
         {localArr.map((num, i) => {
           return <div key={`box-bubble-${num}-${i}`} className='box' style={{height:`${10 * num}px`}}>

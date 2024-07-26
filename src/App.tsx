@@ -5,6 +5,7 @@ import QuickSortBase from './SortingComponent/QuickSortBase'
 import QuickSortDuplicate from './SortingComponent/QuickSortDuplicates'
 import SelectionSort from './SortingComponent/SelectionSort'
 import './App.css'
+import InfoComponent from './SortingComponent/InfoComponent'
 
 /**
  ---COMMANDS---
@@ -17,7 +18,7 @@ const ARR_MODES = ['random', 'sorted', 'reversed', 'with duplicates'] as const;
 const MODES = ['all' , 'bubbleSort' , 'selectionSort' , 'quickSortBase' , 'quickSortDuplicates' , 'heapSort'] as const;
 
 function App() {
-  const [arrSize, setArrSize] = useState<number>(2);
+  const [arrSize, setArrSize] = useState<number>(30);
   const [arr, setArr] = useState<number[]>(Array(arrSize).fill(0).map(() => Math.floor((Math.random() * (1 - 0.1) + 0.1) * 20)).sort((a, b) => a - b).reverse())
   const [arrMode, setArrMode] = useState<'random' | 'sorted' | 'reversed' | 'with duplicates'>('random')
   const [mode, setMode] = useState<'all' | 'bubbleSort' | 'selectionSort' | 'quickSortBase' | 'quickSortDuplicates' | 'heapSort'>('all');
@@ -47,8 +48,8 @@ function App() {
     if (!arrSizeRef.current){
       return
     };
-    if (Number(arrSizeRef.current.value) > 50){
-      alert('max val is 50');
+    if (Number(arrSizeRef.current.value) > 30){
+      alert('max val is 30');
       return
     };
 
@@ -99,43 +100,56 @@ function App() {
 
   return(
     <div>
+      <h1 className='h1'>sorting algorithms visualizer</h1>
       <div>
-        {MODES.map((val, idx) => (
-          <button disabled={isSorting} key={`modes-button-${val}-${idx}`} onClick={() => setMode(val)}>{val}</button>
-        ))}
-      </div>
-      <div className={`${mode === 'all' ? 'test-container' : ''}`}>
-        {(mode === 'all' || mode === 'bubbleSort')&&
-          <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')} time={speed}/>
-        }
-        {(mode === 'all' || mode === 'selectionSort')&&
-          <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')} time={speed}/>
-        }
-        {(mode === 'all' || mode === 'heapSort')&&
-          <HeapSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('heapSort')} time={speed}/>
-        }
-        {(mode === 'all' || mode === 'quickSortBase')&&
-          <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortBase')} time={speed}/>
-        }
-        {(mode === 'all' || mode === 'quickSortDuplicates')&&
-        <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDuplicates')} time={speed}/>
-        }
-      </div>
-      <div>
-        <button onClick={startSorting} disabled={isSorting}>Start Sorting</button>
-        {ARR_MODES.map((val, idx) => (
-          <button disabled={isSorting} key={`arr-modes-button-${val}-${idx}`} onClick={() => setArrMode(val)}>{val}</button>
-        ))}
-        <button onClick={resetSorting} disabled={!allSortsCompleted}>Reset</button>
-        <div>
-          <label htmlFor="speed-input">set speed</label>
-          <input type="number" min={0} name='speed-input' id='speed-input' ref={inputRef} placeholder='in mill seconds'/>
-          <button disabled={isSorting} onClick={handleSpeed}>change speed</button>
+        <div className='flex align-items-center justify-content-between p-1 flex-wrap'>
+          {MODES.map((val, idx) => (
+            <button className='button' disabled={isSorting} key={`modes-button-${val}-${idx}`} onClick={() => setMode(val)}>{val}</button>
+          ))}
         </div>
+        <div className={`${mode === 'all' ? 'test-container' : ''}`}>
+          {(mode === 'all' || mode === 'bubbleSort')&&
+            <BubbleSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('bubbleSort')} time={speed}/>
+          }
+          {(mode === 'all' || mode === 'selectionSort')&&
+            <SelectionSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('selectionSort')} time={speed}/>
+          }
+          {(mode === 'all' || mode === 'heapSort')&&
+            <HeapSort arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('heapSort')} time={speed}/>
+          }
+          {(mode === 'all' || mode === 'quickSortBase')&&
+            <QuickSortBase arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortBase')} time={speed}/>
+          }
+          {(mode === 'all' || mode === 'quickSortDuplicates')&&
+          <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDuplicates')} time={speed}/>
+          }
+        </div>
+        {(mode !== 'all')&&
+          MODES.slice(1).map((val, idx) => (
+            val === mode ?
+            <InfoComponent key={`info-${val}-${idx}`} name={val}/>
+            :
+            null
+          ))
+        }
         <div>
-          <label htmlFor="arr-size-input">set data size</label>
-          <input type="number" min={0} max={50} name='arr-size-input' id='arr-size-input' ref={arrSizeRef} placeholder='max is 50'/>
-          <button disabled={isSorting} onClick={handleArrSize}>change data size</button>
+          <div className='flex align-items-center justify-content-between p-1 flex-wrap'>
+            <button className='button' onClick={startSorting} disabled={isSorting}>Start Sorting</button>
+            {ARR_MODES.map((val, idx) => (
+              <button className='button' disabled={isSorting} key={`arr-modes-button-${val}-${idx}`} onClick={() => setArrMode(val)}>{val}</button>
+            ))}
+            <button className='button' onClick={resetSorting} disabled={!allSortsCompleted}>Reset</button>
+          </div>
+          <div className='flex align-items-center gap-1'>
+            <label htmlFor="speed-input">set speed</label>
+            <input className='input' type="number" min={0} name='speed-input' id='speed-input' ref={inputRef} placeholder='in mill seconds'/>
+            <button className='button' disabled={isSorting} onClick={handleSpeed}>change speed</button>
+          </div>
+          <div className='flex align-items-center gap-1'>
+            <label htmlFor="arr-size-input">set data size</label>
+            <input className='input' type="number" min={0} max={30} name='arr-size-input' id='arr-size-input' ref={arrSizeRef} placeholder='max is 30'/>
+            <button className='button' disabled={isSorting} onClick={handleArrSize}>change data size</button>
+          </div>
         </div>
       </div>
     </div>

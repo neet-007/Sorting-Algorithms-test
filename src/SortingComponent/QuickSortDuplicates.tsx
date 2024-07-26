@@ -165,7 +165,7 @@ const QuickSortDuplicate:React.FC<ComponentProps<'div'> & {arr:number[], isSorti
 
   return (
     <div>
-      <div>
+      <div className='h2'>
         quick sort3
       </div>
       <div ref={ref} className='container'>
