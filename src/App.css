@@ -5,6 +5,7 @@
     --main-clr-light: #ade8f4;
     --compare-clr: #ffd166;
     --found-clr: #06d6a0;
+    background-color: #fdf0d5;
     padding: 1rem;
     text-transform: capitalize;
 }
@@ -48,6 +49,12 @@
     font-size:x-large;
     font-weight: 600;
     margin-bottom: 0.5rem;
+}
+
+.h3{
+    font-size: larger;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
 }
 
 .flex{
@@ -131,6 +138,13 @@
 .button:hover{
     background-color: var(--main-clr-light);
     color: black;
+}
+
+.button:disabled{
+    background-color: var(--main-clr-light);
+    color: black;
+    opacity: 70%;
+    cursor: not-allowed;
 }
 
 @media only screen and (min-width:870px) and (max-width:1300px) {

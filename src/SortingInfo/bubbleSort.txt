@@ -1,11 +1,11 @@
-Pseudo Code:
-1. Iterate through the array.
-2. Compare adjacent elements and swap them if they are in the wrong order.
-3. Repeat the process for each element until the array is sorted.
-4. The largest element "bubbles" to the end of the array on each pass.
+Pseudo Code:!
+1- Iterate through the array.
+2- Compare adjacent elements and swap them if they are in the wrong order.
+3- Repeat the process for each element until the array is sorted.
+4- The largest element "bubbles" to the end of the array on each pass.
 ---
-Information:
-Memory: O(1)
-Time: O(n^2)
-Type: Comparison-based
+Information:!
+Memory: O(1).
+Time: O(n^2).
+Type: Comparison-based.
 Best Use Case: Small arrays or when the array is nearly sorted.

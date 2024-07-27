@@ -90,14 +90,6 @@ function App() {
     setSortCompleted((prev) => ({ ...prev, [sortName]: true }));
   };
 
-  function resetSorting() {
-    // Reset sorting state in child components
-    setIsSorting(false);
-    setSortCompleted({ quickSortDuplicates:false, bubbleSort:false, selectionSort:false, heapSort:false, quickSortBase:false });
-  };
-
-  const allSortsCompleted = mode === 'all' ? Object.values(sortCompleted).every((completed) => completed) : sortCompleted[mode];
-
   return(
     <div>
       <h1 className='h1'>sorting algorithms visualizer</h1>
@@ -124,21 +116,12 @@ function App() {
           <QuickSortDuplicate arr={arr} isSorting={isSorting} onSortComplete={() => handleSortCompletion('quickSortDuplicates')} time={speed}/>
           }
         </div>
-        {(mode !== 'all')&&
-          MODES.slice(1).map((val, idx) => (
-            val === mode ?
-            <InfoComponent key={`info-${val}-${idx}`} name={val}/>
-            :
-            null
-          ))
-        }
         <div>
           <div className='flex align-items-center justify-content-between p-1 flex-wrap'>
             <button className='button' onClick={startSorting} disabled={isSorting}>Start Sorting</button>
             {ARR_MODES.map((val, idx) => (
               <button className='button' disabled={isSorting} key={`arr-modes-button-${val}-${idx}`} onClick={() => setArrMode(val)}>{val}</button>
             ))}
-            <button className='button' onClick={resetSorting} disabled={!allSortsCompleted}>Reset</button>
           </div>
           <div className='flex align-items-center gap-1'>
             <label htmlFor="speed-input">set speed</label>
@@ -151,6 +134,14 @@ function App() {
             <button className='button' disabled={isSorting} onClick={handleArrSize}>change data size</button>
           </div>
         </div>
+        {(mode !== 'all')&&
+          MODES.slice(1).map((val, idx) => (
+            val === mode ?
+            <InfoComponent key={`info-${val}-${idx}`} name={val}/>
+            :
+            null
+          ))
+        }
       </div>
     </div>
   )

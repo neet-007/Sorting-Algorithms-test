@@ -14,12 +14,31 @@ const InfoComponent:React.FC<ComponentProps<'div'> & {name:string}> = ({name, ..
 
   return (
     <div {...props}>
-        <p>
-            {sudoCode}
-        </p>
-        <p>
-            {info}
-        </p>
+        <p className='h2'>information</p>
+        {sudoCode &&
+          <div>
+            {sudoCode.split('!').map((val, idx) => (
+              idx === 0 ?
+              <p key={`info-sudo-code-title-${idx}`} className='h3'>{val}</p>
+              :
+              val.split('.').map((val_, idx_) => (
+                <p key={`info-sudo-code-steps-${idx_}`}>{val_}</p>
+              ))
+            ))}
+          </div>
+        }
+        {info &&
+          <div>
+            {info.split('!').map((val, idx) => (
+              idx === 0 ?
+              <p key={`info-info-title-${idx}`} className='h3'>{val}</p>
+              :
+              val.split('.').map((val_, idx_) => (
+                <p key={`info-info=${idx_}`}>{val_}</p>
+              ))
+            ))}
+          </div>
+        }
     </div>
   )
 }
