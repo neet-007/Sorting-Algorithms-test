@@ -1,0 +1,12 @@
+Pseudo Code:!
+1- Choose a pivot element from the array.
+2- Partition the array into two subarrays: elements less than the pivot and elements greater than the pivot.
+3- Recursively apply the same process to the subarrays.
+4- Combine the subarrays to get the sorted array.
+---
+Information:!
+Memory: O(log n).
+Time: O(n log n) on average, O(n^2) worst case.
+Type: Comparison-based, Divide-and-Conquer.
+Best Use Case: Large arrays or when average performance is more important than worst-case performance.
+

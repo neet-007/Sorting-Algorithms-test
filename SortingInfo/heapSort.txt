@@ -1,0 +1,11 @@
+Pseudo Code:!
+1- Build a max heap from the input array.
+2- Swap the root of the heap with the last element of the heap.
+3- Reduce the size of the heap by one and heapify the root.
+4- Repeat until the heap size is 1.
+---
+Information:!
+Memory: O(1).
+Time: O(n log n).
+Type: Comparison-based, In-place.
+Best Use Case: When you need a guaranteed O(n log n) time complexity and in-place sorting.
